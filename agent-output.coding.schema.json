@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "file:///.codex/agent-output.coding.schema.json",
+  "title": "Codex Coding Subagent Output",
+  "description": "Structural schema for pure coding tasks executed by the coding agent.",
+  "type": "object",
+  "required": [
+    "ssot_id",
+    "task_id",
+    "subtask_id",
+    "agent_type",
+    "routing_mode",
+    "slice_id",
+    "attempt",
+    "status",
+    "summary",
+    "blocked",
+    "self_check",
+    "rationale",
+    "blocking_reason",
+    "allowed_paths"
+  ],
+  "properties": {
+    "ssot_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "task_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "subtask_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "agent_type": {
+      "type": "string",
+      "const": "coding"
+    },
+    "routing_mode": {
+      "type": "string",
+      "const": "main_router"
+    },
+    "slice_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "attempt": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "in_progress",
+        "done",
+        "awaiting_review"
+      ]
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "blocked": {
+      "type": "boolean"
+    },
+    "self_check": {
+      "type": "object",
+      "required": [
+        "status",
+        "command",
+        "evidence"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "pass",
+            "fail",
+            "not_applicable"
+          ]
+        },
+        "command": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "rationale": {
+      "type": "string",
+      "minLength": 1
+    },
+    "blocking_reason": {
+      "type": "string",
+      "minLength": 1
+    },
+    "allowed_paths": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "^/"
+      }
+    }
+  },
+  "examples": [
+    {
+      "ssot_id": "sso-t-2026-02-18",
+      "task_id": "task-write-001",
+      "subtask_id": "s2-write",
+      "agent_type": "coding",
+      "routing_mode": "main_router",
+      "slice_id": "slice-write-a",
+      "attempt": 1,
+      "status": "done",
+      "summary": "Applied requested implementation updates.",
+      "blocked": false,
+      "self_check": {
+        "status": "pass",
+        "command": "cargo test -q",
+        "evidence": "All targeted checks passed."
+      },
+      "rationale": "Changes are scoped to requested files and acceptance criteria.",
+      "blocking_reason": "not_applicable",
+      "allowed_paths": [
+        "/Users/<USER>/.codex/AGENTS.md"
+      ]
+    }
+  ],
+  "additionalProperties": false
+}

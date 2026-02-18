@@ -1,0 +1,173 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "file:///.codex/dispatch-preflight.schema.json",
+  "title": "Codex Dispatch Preflight",
+  "description": "Structural schema for Main-agent Dispatch Preflight JSON. Cross-field/runtime invariants are enforced by AGENTS.md.",
+  "type": "object",
+  "required": [
+    "ssot_id",
+    "ssot",
+    "routing_mode",
+    "subtasks",
+    "scheduler_plan"
+  ],
+  "properties": {
+    "ssot_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "ssot": {
+      "type": "object",
+      "required": [
+        "goal",
+        "non_goals",
+        "constraints",
+        "acceptance_criteria",
+        "decisions"
+      ],
+      "properties": {
+        "goal": {
+          "type": "string",
+          "minLength": 1
+        },
+        "non_goals": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "constraints": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "acceptance_criteria": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "decisions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "routing_mode": {
+      "type": "string",
+      "const": "main_router"
+    },
+    "subtasks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "task_id",
+          "subtask_id",
+          "type",
+          "delegate_target",
+          "allowed_paths",
+          "deliverable"
+        ],
+        "properties": {
+          "task_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "subtask_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "read_only",
+              "write"
+            ]
+          },
+          "delegate_target": {
+            "type": "string",
+            "enum": [
+              "assistant"
+            ],
+            "description": "Dispatch Preflight subtasks are always delegated to assistant."
+          },
+          "allowed_paths": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^/"
+            }
+          },
+          "deliverable": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "scheduler_plan": {
+      "type": "string",
+      "const": "windowed"
+    }
+  },
+  "examples": [
+    {
+      "ssot_id": "sso-t-2026-02-18-main-router-only",
+      "ssot": {
+        "goal": "Apply requested file updates with assistant-reviewed coding relay execution.",
+        "non_goals": [
+          "No unrelated refactors"
+        ],
+        "constraints": [
+          "SSOT frozen during execution",
+          "Routing mode fixed to main_router"
+        ],
+        "acceptance_criteria": [
+          "Schema-valid delegate outputs",
+          "Requested files updated"
+        ],
+        "decisions": [
+          "Use main_router routing mode"
+        ]
+      },
+      "routing_mode": "main_router",
+      "subtasks": [
+        {
+          "task_id": "task-brief-001",
+          "subtask_id": "s1-brief",
+          "type": "read_only",
+          "delegate_target": "assistant",
+          "allowed_paths": [
+            "/abs/repo"
+          ],
+          "deliverable": "Coding-ready implementation brief."
+        },
+        {
+          "task_id": "task-write-001",
+          "subtask_id": "s2-write",
+          "type": "write",
+          "delegate_target": "assistant",
+          "allowed_paths": [
+            "/abs/repo/path/file.md"
+          ],
+          "deliverable": "Assistant-reviewed coding execution with evidence."
+        }
+      ],
+      "scheduler_plan": "windowed"
+    }
+  ],
+  "additionalProperties": false
+}

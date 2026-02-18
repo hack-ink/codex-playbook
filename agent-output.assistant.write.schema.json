@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "file:///.codex/agent-output.assistant.write.schema.json",
+  "title": "Codex Assistant Output (Write)",
+  "description": "Structural schema for assistant outputs that report completion of write subtasks.",
+  "type": "object",
+  "required": [
+    "ssot_id",
+    "task_id",
+    "subtask_id",
+    "agent_type",
+    "routing_mode",
+    "slice_id",
+    "relay_via_main",
+    "coding_subtask_ids",
+    "parallel_peak_inflight",
+    "status",
+    "blocked",
+    "rationale",
+    "review_only",
+    "blocking_reason",
+    "allowed_paths"
+  ],
+  "properties": {
+    "ssot_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "task_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "subtask_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "agent_type": {
+      "type": "string",
+      "const": "assistant"
+    },
+    "routing_mode": {
+      "type": "string",
+      "const": "main_router"
+    },
+    "slice_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "relay_via_main": {
+      "type": "boolean",
+      "const": true
+    },
+    "coding_subtask_ids": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "parallel_peak_inflight": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "in_progress",
+        "done",
+        "awaiting_review"
+      ]
+    },
+    "blocked": {
+      "type": "boolean"
+    },
+    "rationale": {
+      "type": "string",
+      "minLength": 1
+    },
+    "review_only": {
+      "type": "boolean"
+    },
+    "blocking_reason": {
+      "type": "string",
+      "minLength": 1
+    },
+    "allowed_paths": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "^/"
+      }
+    }
+  },
+  "examples": [
+    {
+      "ssot_id": "sso-t-2026-02-18",
+      "task_id": "task-write-001",
+      "subtask_id": "s2-write",
+      "agent_type": "assistant",
+      "routing_mode": "main_router",
+      "slice_id": "slice-write-a",
+      "relay_via_main": true,
+      "coding_subtask_ids": [
+        "s2-write-coding-1",
+        "s2-write-coding-2"
+      ],
+      "parallel_peak_inflight": 2,
+      "status": "done",
+      "blocked": false,
+      "rationale": "Execution completed under frozen SSOT with assistant review passed.",
+      "review_only": false,
+      "blocking_reason": "not_applicable",
+      "allowed_paths": [
+        "/Users/<USER>/.codex/AGENTS.md"
+      ]
+    }
+  ],
+  "additionalProperties": false
+}

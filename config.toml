@@ -1,0 +1,51 @@
+approval_policy = "never"
+model = "gpt-5.2"
+model_reasoning_effort = "xhigh"
+notify = ["python3", "./notify.py"]
+personality = "pragmatic"
+sandbox_mode = "danger-full-access"
+websearch = "cached"
+
+[agents]
+max_threads = 24
+
+[agents.assistant]
+description = "Assistant orchestrator profile for non-coding delegation, review, and reporting."
+config_file = "./agents/assistant.toml"
+
+[agents.coding]
+description = "Coding executor profile for repository implementation writes only."
+config_file = "./agents/coding.toml"
+
+[features]
+apply_patch_freeform = true
+apps = true
+child_agents_md = true
+multi_agent = true
+responses_websockets_v2 = true
+runtime_metrics = true
+search_tool = true
+sqlite = true
+
+[mcp_servers.context7]
+url = "https://mcp.context7.com/mcp"
+# Do not commit secrets.
+http_headers = { "Authorization" = "Bearer <CONTEXT7_BEARER_TOKEN>" }
+
+[mcp_servers.deepwiki]
+url = "https://mcp.devin.ai/mcp"
+# Do not commit secrets.
+http_headers = { "Authorization" = "Bearer <DEEPWIKI_BEARER_TOKEN>" }
+
+[notice]
+hide_full_access_warning = true
+hide_rate_limit_model_nudge = true
+
+[notice.model_migrations]
+"gpt-5.2" = "gpt-5.3-codex"
+
+[profiles.plan]
+model_reasoning_effort = "xhigh"
+
+[tui]
+status_line = ["model-with-reasoning", "current-dir", "project-root", "git-branch", "context-remaining", "five-hour-limit", "weekly-limit", "used-tokens", "total-input-tokens", "total-output-tokens"]
