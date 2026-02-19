@@ -212,13 +212,13 @@ Stop and return blocked on:
 - Never run destructive commands unless explicitly requested.
 - Do not modify toolchain or system packages unless explicitly requested.
 - For GitHub access, use `GITHUB_PAT` (preferred explicit override).
-  - Multi-account convention (optional): set `GITHUB_PAT_X` and `GITHUB_PAT_Y` in your shell.
-  - If `GITHUB_PAT` is unset, select a token based on repo identity:
-    1. If `git config --get codex.github_identity` returns `y`, use `GITHUB_PAT_Y`.
-    2. Otherwise use `GITHUB_PAT_X`.
-    3. If detection fails or the selected token is unset, default to X; if still missing, block and ask for credentials.
-  - Recommended git config to make selection automatic (per repo, or via include files):
-    - `[codex] github_identity = x|y`
+  - Multi-account convention (optional): set `GITHUB_PAT_X` and `GITHUB_PAT_Y` in your shell (exported).
+  - If `GITHUB_PAT` is unset, select a token automatically:
+    1. If `git config --get codex.github_identity` returns `y`, use `GITHUB_PAT_Y`; if it returns `x`, use `GITHUB_PAT_X`.
+    2. Otherwise infer by workspace path: if the git repo root (or current directory) is under `$HOME/code/trusted/y/`, use Y; else use X.
+    3. If detection fails, default to X.
+    4. If the selected token is unset, block and ask for credentials.
+  - Optional: set `[codex] github_identity = x|y` via git include files (for example `includeIf gitdir:`) to avoid relying on path heuristics.
   - Never print tokens, commit them, or paste them into logs.
 
 ## 10) Execution Defaults
